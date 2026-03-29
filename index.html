@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AdPress — Book Newspaper Ads Instantly</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Page-specific extras */
+    .hero-particles { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+    .hero-headline-line { overflow: hidden; }
+
+    /* Ticker */
+    .ticker-wrap {
+      background: var(--gold);
+      overflow: hidden;
+      padding: 10px 0;
+      position: relative;
+    }
+    .ticker-inner {
+      display: flex;
+      gap: 48px;
+      white-space: nowrap;
+      animation: tickerScroll 28s linear infinite;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .ticker-item::before { content: '◆'; font-size: 0.5rem; }
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Trust logos */
+    .trust-strip {
+      padding: 40px 0;
+      border-bottom: 1px solid #e8e4dc;
+    }
+    .trust-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .trust-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #ccc;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .trust-logo:hover { color: var(--gold); }
+
+    /* Process section */
+    .process-section { background: var(--cream); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+      z-index: 0;
+    }
+    .process-step {
+      text-align: center;
+      padding: 32px 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .process-num {
+      width: 64px; height: 64px;
+      background: var(--gradient-gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 0 auto 20px;
+      box-shadow: var(--shadow-gold);
+    }
+    .process-step h4 { font-size: 1rem; margin-bottom: 8px; }
+    .process-step p { font-size: 0.85rem; color: #666; }
+
+    /* Testimonials */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 32px;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201,168,76,0.3);
+    }
+    .stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testimonial-card p { color: rgba(255,255,255,0.75); font-size: 0.95rem; line-height: 1.8; margin-bottom: 24px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--gradient-gold);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 0.9rem;
+    }
+    .author-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
+    .author-role { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+
+    /* CTA Section */
+    .cta-section {
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,168,76,0.12), transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .cta-inner h2 { color: #fff; margin-bottom: 16px; }
+    .cta-inner p { color: rgba(255,255,255,0.65); margin-bottom: 36px; font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon">AP</div>
+    Ad<span>Press</span>
+  </a>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="navbar-menu" id="navMenu">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#newspapers">Newspapers</a></li>
+    <li><a href="#platforms">Other Platforms</a></li>
+  </ul>
+
+  <div class="navbar-actions">
+    <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline>
+      <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-particles" id="particles"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">India's Premier Ad Booking Platform</div>
+    <h1>
+      <div class="hero-headline-line">Book Newspaper <em>Ads</em></div>
+      <div class="hero-headline-line">Instantly Online</div>
+    </h1>
+    <p>Reach millions across India. Book classified, display & recruitment ads in 500+ newspapers with real-time pricing, instant confirmation, and seamless publishing.</p>
+    <div class="hero-cta">
+      <a href="login.html" class="btn btn-primary">
+        <span>🚀</span> Start Booking
+      </a>
+      <a href="#services" class="btn btn-outline">
+        <span>▶</span> Explore Services
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item">The Hindu</span>
+    <span class="ticker-item">Times of India</span>
+    <span class="ticker-item">Deccan Herald</span>
+    <span class="ticker-item">Dinamalar</span>
+    <span class="ticker-item">Dainik Jagran</span>
+    <span class="ticker-item">Hindustan Times</span>
+    <span class="ticker-item">Ananda Bazar</span>
+    <span class="ticker-item">Eenadu</span>
+    <span class="ticker-item">Sakshi</span>
+    <span class="ticker-item">Malayala Manorama</span>
+    <span class="ticker-item">Mathrubhumi</span>
+    <span class="ticker-item">Vijay Karnataka</span>
+    <!-- repeat for seamless loop -->
+    <span class="ticker-item">The Hindu</span>
+    <span class="ticker-item">Times of India</span>
+    <span class="ticker-item">Deccan Herald</span>
+    <span class="ticker-item">Dinamalar</span>
+    <span class="ticker-item">Dainik Jagran</span>
+    <span class="ticker-item">Hindustan Times</span>
+    <span class="ticker-item">Ananda Bazar</span>
+    <span class="ticker-item">Eenadu</span>
+    <span class="ticker-item">Sakshi</span>
+    <span class="ticker-item">Malayala Manorama</span>
+    <span class="ticker-item">Mathrubhumi</span>
+    <span class="ticker-item">Vijay Karnataka</span>
+  </div>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <h3 id="stat1">0</h3>
+        <p>Newspapers Available</p>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <h3 id="stat2">0</h3>
+        <p>Cities Covered</p>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <h3 id="stat3">0</h3>
+        <p>Ads Published</p>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <h3 id="stat4">0</h3>
+        <p>Happy Customers</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TRUST STRIP ── -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-inner">
+      <div class="trust-logo">THE HINDU</div>
+      <div class="trust-logo">TIMES OF INDIA</div>
+      <div class="trust-logo">DINAMALAR</div>
+      <div class="trust-logo">DAINIK JAGRAN</div>
+      <div class="trust-logo">HINDUSTAN TIMES</div>
+      <div class="trust-logo">DECCAN HERALD</div>
+      <div class="trust-logo">EENADU</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge">Our Services</span>
+      <h2>Everything You Need to <span class="text-gold">Advertise</span></h2>
+      <p>From small classified text ads to full-page display campaigns — all handled end-to-end.</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-card-img" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+          <span style="font-size:4rem; z-index:1; position:relative;">📝</span>
+        </div>
+        <div class="service-card-body">
+          <h3>Classified Text Ads</h3>
+          <p>Simple, cost-effective text-based ads for matrimonial, jobs, property, and more. Pay per word or line.</p>
+          <a href="login.html" class="btn btn-dark btn-sm">Book Now →</a>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-card-img" style="background: linear-gradient(135deg, #0f3460, #533483);">
+          <span style="font-size:4rem; z-index:1; position:relative;">🖼️</span>
+        </div>
+        <div class="service-card-body">
+          <h3>Classified Display Ads</h3>
+          <p>Combine text with images in a boxed format. Perfect for business announcements and product launches.</p>
+          <a href="login.html" class="btn btn-dark btn-sm">Book Now →</a>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-card-img" style="background: linear-gradient(135deg, #7b2d00, #c0392b);">
+          <span style="font-size:4rem; z-index:1; position:relative;">📰</span>
+        </div>
+        <div class="service-card-body">
+          <h3>Display Ads</h3>
+          <p>Large, impactful full-page or half-page ads with creative designs. Maximum visibility, maximum impact.</p>
+          <a href="login.html" class="btn btn-dark btn-sm">Book Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROCESS ── -->
+<section class="section process-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge">How It Works</span>
+      <h2>Book in <span class="text-gold">4 Simple Steps</span></h2>
+      <p>From selection to publication in minutes.</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="process-num">1</div>
+        <h4>Choose Ad Type</h4>
+        <p>Select from classified text, classified display, or full display ads</p>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="process-num">2</div>
+        <h4>Pick Newspaper & City</h4>
+        <p>Choose your target publication and edition from 500+ newspapers</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="process-num">3</div>
+        <h4>Compose Your Ad</h4>
+        <p>Write, upload, or design your ad with our guided tools</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="process-num">4</div>
+        <h4>Pay & Confirm</h4>
+        <p>Secure payment via UPI, card or net banking. Get instant confirmation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-visual reveal">
+        <div class="about-img-main">📰</div>
+        <div class="about-badge-float">
+          <span class="big">2012</span>
+          Established
+        </div>
+      </div>
+      <div class="about-text reveal reveal-delay-2">
+        <span class="badge">About AdPress</span>
+        <h2>India's Most Trusted <span class="text-gold">Ad Booking</span> Platform</h2>
+        <p>AdPress has been transforming how businesses and individuals place newspaper advertisements since 2012. We provide direct access to India's largest newspaper network — all in one seamless platform.</p>
+        <p>Our technology eliminates middlemen, reduces costs, and gives advertisers real-time pricing, instant booking confirmation, and complete control over their campaigns.</p>
+        <ul class="about-features">
+          <li>500+ Newspapers across 28 states & UTs</li>
+          <li>Real-time pricing with transparent rates</li>
+          <li>Instant booking confirmation via email & SMS</li>
+          <li>Dedicated account manager for every booking</li>
+          <li>Support for all major Indian languages</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── NEWSPAPERS ── -->
+<section class="section section-cream" id="newspapers">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge">Our Partners</span>
+      <h2>500+ <span class="text-gold">Newspapers</span> & Counting</h2>
+      <p>From national dailies to local editions — we cover every market.</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="newspaper-grid">
+      <div class="newspaper-card reveal">
+        <div class="newspaper-logo" style="background:#e8f4fd; color:#1565c0">TH</div>
+        <h4>The Hindu</h4>
+        <p>National · English</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-1">
+        <div class="newspaper-logo" style="background:#fff3e0; color:#e65100">TOI</div>
+        <h4>Times of India</h4>
+        <p>National · English</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-2">
+        <div class="newspaper-logo" style="background:#fce4ec; color:#c62828">DM</div>
+        <h4>Dinamalar</h4>
+        <p>Tamil Nadu · Tamil</p>
+      </div>
+      <div class="newspaper-card reveal">
+        <div class="newspaper-logo" style="background:#e8f5e9; color:#2e7d32">DT</div>
+        <h4>Dinathanthi</h4>
+        <p>Tamil Nadu · Tamil</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-1">
+        <div class="newspaper-logo" style="background:#f3e5f5; color:#7b1fa2">DK</div>
+        <h4>Deccan Herald</h4>
+        <p>Karnataka · English</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-2">
+        <div class="newspaper-logo" style="background:#e3f2fd; color:#0277bd">HT</div>
+        <h4>Hindustan Times</h4>
+        <p>National · English</p>
+      </div>
+      <div class="newspaper-card reveal">
+        <div class="newspaper-logo" style="background:#fff8e1; color:#f57f17">EE</div>
+        <h4>Eenadu</h4>
+        <p>Andhra Pradesh · Telugu</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-1">
+        <div class="newspaper-logo" style="background:#e0f7fa; color:#00695c">MM</div>
+        <h4>Malayala Manorama</h4>
+        <p>Kerala · Malayalam</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-2">
+        <div class="newspaper-logo" style="background:#fbe9e7; color:#bf360c">DJ</div>
+        <h4>Dainik Jagran</h4>
+        <p>North India · Hindi</p>
+      </div>
+      <div class="newspaper-card reveal">
+        <div class="newspaper-logo" style="background:#e8eaf6; color:#283593">SK</div>
+        <h4>Sakshi</h4>
+        <p>Andhra Pradesh · Telugu</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-1">
+        <div class="newspaper-logo" style="background:#f9fbe7; color:#558b2f">VK</div>
+        <h4>Vijay Karnataka</h4>
+        <p>Karnataka · Kannada</p>
+      </div>
+      <div class="newspaper-card reveal reveal-delay-2">
+        <div class="newspaper-logo" style="background:#fff3e0; color:#bf360c">MB</div>
+        <h4>Mathrubhumi</h4>
+        <p>Kerala · Malayalam</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OTHER PLATFORMS ── -->
+<section class="section section-dark" id="platforms">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge" style="color:#ffd54f; border-color:#ffd54f;">Beyond Print</span>
+      <h2 style="color:#fff;">Expand to <span class="text-gold">Digital Platforms</span></h2>
+      <p style="color:rgba(255,255,255,0.6);">Combine print with digital for maximum reach and engagement.</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="platforms-grid">
+      <div class="platform-card reveal">
+        <div class="platform-icon">📱</div>
+        <h3>Social Media Ads</h3>
+        <p>Run targeted ads across Facebook, Instagram, and Twitter to complement your print campaign.</p>
+        <a href="login.html" class="btn btn-outline btn-sm">Explore →</a>
+      </div>
+      <div class="platform-card reveal reveal-delay-1">
+        <div class="platform-icon">🌐</div>
+        <h3>Digital News Portals</h3>
+        <p>Advertise on leading digital news platforms with precise audience targeting and real-time analytics.</p>
+        <a href="login.html" class="btn btn-outline btn-sm">Explore →</a>
+      </div>
+      <div class="platform-card reveal reveal-delay-2">
+        <div class="platform-icon">📧</div>
+        <h3>Email Campaigns</h3>
+        <p>Reach engaged subscribers of major publications directly in their inboxes.</p>
+        <a href="login.html" class="btn btn-outline btn-sm">Explore →</a>
+      </div>
+      <div class="platform-card reveal reveal-delay-3">
+        <div class="platform-icon">📺</div>
+        <h3>OTT & Video Ads</h3>
+        <p>Video advertisements on popular OTT platforms reaching cord-cutters and digital natives.</p>
+        <a href="login.html" class="btn btn-outline btn-sm">Explore →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge" style="color:#ffd54f; border-color:#ffd54f;">Testimonials</span>
+      <h2 style="color:#fff;">What Our <span class="text-gold">Clients Say</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Booked a matrimonial ad in The Hindu in under 5 minutes. The process was incredibly smooth and the pricing was very transparent. Highly recommend AdPress!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">RK</div>
+          <div>
+            <div class="author-name">Ramesh Kumar</div>
+            <div class="author-role">Chennai, Tamil Nadu</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p>"We use AdPress for all our property listings. The multi-city booking feature saves us so much time. Their customer support is also exceptional."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SP</div>
+          <div>
+            <div class="author-name">Sunita Patel</div>
+            <div class="author-role">Real Estate Developer, Bangalore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p>"As an HR manager, I book recruitment ads frequently. The instant confirmation and proof-of-publication feature makes my job so much easier."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AM</div>
+          <div>
+            <div class="author-name">Anita Menon</div>
+            <div class="author-role">HR Manager, Mumbai</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA SECTION ── -->
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <span class="badge">Get Started Today</span>
+      <h2 style="color:#fff;">Ready to <em>Reach Millions?</em></h2>
+      <p>Join over 50,000 advertisers who trust AdPress for their newspaper advertising needs. No subscription required — pay only for what you book.</p>
+      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+        <a href="login.html" class="btn btn-primary">🚀 Book Your First Ad</a>
+        <a href="#services" class="btn btn-outline">Learn More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+          <div class="logo-icon">AP</div>
+          <span style="color:#fff; font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900;">Ad<span style="color:var(--gold)">Press</span></span>
+        </div>
+        <p>India's most trusted newspaper advertisement booking platform. Book, manage, and track all your print ads from one powerful dashboard.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#">Classified Text Ads</a></li>
+          <li><a href="#">Classified Display Ads</a></li>
+          <li><a href="#">Display Ads</a></li>
+          <li><a href="#">Digital Ads</a></li>
+          <li><a href="#">Recruitment Ads</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Newspapers</h5>
+        <ul>
+          <li><a href="#">The Hindu</a></li>
+          <li><a href="#">Times of India</a></li>
+          <li><a href="#">Hindustan Times</a></li>
+          <li><a href="#">Dinamalar</a></li>
+          <li><a href="#">Eenadu</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 AdPress. All rights reserved.</p>
+      <p>Made with ♥ for India's advertisers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // Particles
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
+    p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    container.appendChild(p);
+  }
+
+  // Counter animation
+  function animateCounter(el, target, suffix = '', duration = 2000) {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = Math.floor(start) + suffix;
+    }, 16);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounter(document.getElementById('stat1'), 500, '+');
+        animateCounter(document.getElementById('stat2'), 120, '+');
+        animateCounter(document.getElementById('stat3'), 2000000, '+');
+        animateCounter(document.getElementById('stat4'), 50000, '+');
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  statsObserver.observe(document.getElementById('stat1'));
+</script>
+</body>
+</html>

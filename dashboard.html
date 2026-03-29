@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — AdPress</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .form-group-light { margin-bottom: 20px; }
+    .section-title-sm { font-size:1rem; font-weight:700; color:#666; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:12px; font-family:'DM Sans',sans-serif; }
+    .alert-info { background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.25); border-radius:10px; padding:14px 18px; font-size:0.88rem; color:#8a6a1f; margin-bottom:20px; }
+    .mobile-sidebar-toggle {
+      display:none;
+      position:fixed; bottom:24px; right:24px;
+      width:52px; height:52px;
+      background:var(--gradient-gold);
+      border-radius:50%;
+      border:none;
+      font-size:1.4rem;
+      cursor:pointer;
+      z-index:500;
+      box-shadow:0 8px 24px rgba(201,168,76,0.4);
+    }
+    @media(max-width:768px){ .mobile-sidebar-toggle{display:flex; align-items:center; justify-content:center;} }
+
+    /* ── Step 5: City & Price — Mobile Responsive ── */
+    @media(max-width:768px) {
+      /* Wrap table in a horizontal scroll container as a base safety net */
+      .pricing-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+      /* Hide the standard table and switch to card layout */
+      .pricing-table table thead { display: none; }
+      .pricing-table table, 
+      .pricing-table tbody, 
+      .pricing-table tr, 
+      .pricing-table td { display: block; width: 100%; box-sizing: border-box; }
+
+      .pricing-table tbody tr {
+        border: 1px solid #e8e4dc;
+        border-radius: 12px;
+        margin: 10px 12px;
+        padding: 14px 16px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        width: calc(100% - 24px);
+      }
+
+      .pricing-table tbody td {
+        padding: 4px 0;
+        font-size: 0.9rem;
+        text-align: left;
+        border: none;
+      }
+
+      /* Hide rank column on mobile to save space */
+      .pricing-table tbody td:first-child { display: none; }
+
+      /* City name — make it a header-like row */
+      .pricing-table tbody td:nth-child(2) {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--ink);
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f0ece3;
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      /* Day pills row */
+      .pricing-table tbody td:nth-child(3) { padding: 6px 0; }
+
+      /* Price row — show label */
+      .pricing-table tbody td:nth-child(4)::before {
+        content: "Price: ";
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      /* Action button — full width, prominent */
+      .pricing-table tbody td:nth-child(5) {
+        padding-top: 12px;
+        margin-top: 4px;
+      }
+      .pricing-table tbody td:nth-child(5) .btn {
+        width: 100%;
+        display: block;
+        text-align: center;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="dashboard-sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html" class="navbar-logo" style="color:#fff;">
+      <div class="logo-icon">AP</div>
+      Ad<span>Press</span>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-title">Main</div>
+    <a href="#" class="active"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a href="#" onclick="resetBooking()"><span class="nav-icon">➕</span> New Booking</a>
+    <a href="#"><span class="nav-icon">📋</span> My Bookings <span class="nav-badge">3</span></a>
+    <a href="#"><span class="nav-icon">📊</span> Analytics</a>
+
+    <div class="sidebar-section-title">Tools</div>
+    <a href="#"><span class="nav-icon">✏️</span> Ad Composer</a>
+    <a href="#"><span class="nav-icon">💳</span> Billing</a>
+    <a href="#"><span class="nav-icon">📁</span> Media Library</a>
+    <a href="#"><span class="nav-icon">🔔</span> Notifications</a>
+
+    <div class="sidebar-section-title">Account</div>
+    <a href="#"><span class="nav-icon">⚙️</span> Settings</a>
+    <a href="#"><span class="nav-icon">🤝</span> Support</a>
+    <a href="#" onclick="logoutUser()"><span class="nav-icon">🚪</span> Logout</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="avatar" id="sidebarAvatar">U</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebarName">User</div>
+        <div class="user-plan">✦ Pro Plan</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="dashboard-main">
+
+  <!-- Topbar -->
+  <div class="dashboard-topbar">
+    <div class="topbar-left">
+      <div>
+        <h2>Book a New Ad</h2>
+        <div class="breadcrumb">Dashboard → <span id="breadcrumbStep">Select Ad Type</span></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-notif">🔔<div class="notif-dot"></div></div>
+      <div class="topbar-notif">📁</div>
+      <div class="sidebar-user" style="background:transparent; border:none; padding:0; gap:10px;">
+        <div class="avatar" id="topbarAvatar" style="width:36px; height:36px; font-size:0.8rem;">U</div>
+        <div class="user-info">
+          <div class="user-name" id="topbarName" style="color:var(--ink);">User</div>
+          <div class="user-plan" style="color:#888;">Pro Plan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="dashboard-content">
+
+    <!-- Booking Steps Indicator -->
+    <div class="booking-steps" id="bookingSteps">
+      <div class="step active" id="stepInd0">
+        <div class="step-num">1</div>
+        <div class="step-label">Ad Type</div>
+      </div>
+      <div class="step-connector" id="conn0"></div>
+      <div class="step" id="stepInd1">
+        <div class="step-num">2</div>
+        <div class="step-label">Category</div>
+      </div>
+      <div class="step-connector" id="conn1"></div>
+      <div class="step" id="stepInd2">
+        <div class="step-num">3</div>
+        <div class="step-label">Format</div>
+      </div>
+      <div class="step-connector" id="conn2"></div>
+      <div class="step" id="stepInd3">
+        <div class="step-num">4</div>
+        <div class="step-label">Newspaper</div>
+      </div>
+      <div class="step-connector" id="conn3"></div>
+      <div class="step" id="stepInd4">
+        <div class="step-num">5</div>
+        <div class="step-label">City & Price</div>
+      </div>
+      <div class="step-connector" id="conn4"></div>
+      <div class="step" id="stepInd5">
+        <div class="step-num">6</div>
+        <div class="step-label">Ad Size</div>
+      </div>
+      <div class="step-connector" id="conn5"></div>
+      <div class="step" id="stepInd6">
+        <div class="step-num">7</div>
+        <div class="step-label">Date & Book</div>
+      </div>
+      <div class="step-connector" id="conn6"></div>
+      <div class="step" id="stepInd7">
+        <div class="step-num">8</div>
+        <div class="step-label">Payment</div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 1: AD TYPE ═══ -->
+    <div class="step-panel active" id="panel0">
+      <div class="panel-title">Choose Your Ad Type</div>
+      <p class="panel-sub">Select the format that best fits your advertising goal</p>
+      <div class="adtype-grid">
+        <div class="adtype-card" onclick="selectAdType(this, 'Classified Text Ad')">
+          <div class="check">✓</div>
+          <div class="adtype-icon">📝</div>
+          <h3>Classified Text Ad</h3>
+          <p>Simple text-based ads charged per word or line. Ideal for matrimonial, jobs, property, lost & found.</p>
+        </div>
+        <div class="adtype-card" onclick="selectAdType(this, 'Classified Display Ad')">
+          <div class="check">✓</div>
+          <div class="adtype-icon">🖼️</div>
+          <h3>Classified Display Ad</h3>
+          <p>Combine text with images in a bordered box. Great for business announcements and product promos.</p>
+        </div>
+        <div class="adtype-card" onclick="selectAdType(this, 'Display Ad')">
+          <div class="check">✓</div>
+          <div class="adtype-icon">📰</div>
+          <h3>Display Ad</h3>
+          <p>Full creative display with custom size options. Maximum impact for brand campaigns and events.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2: CATEGORY ═══ -->
+    <div class="step-panel" id="panel1">
+      <div class="panel-title">Select a Category</div>
+      <p class="panel-sub">Choose the most relevant category for your advertisement</p>
+      <div class="category-grid">
+        <div class="category-card" onclick="selectCategory(this, 'Matrimonial')">
+          <div class="cat-icon">💍</div>
+          <div class="cat-name">Matrimonial</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Property')">
+          <div class="cat-icon">🏠</div>
+          <div class="cat-name">Property</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Jobs')">
+          <div class="cat-icon">💼</div>
+          <div class="cat-name">Jobs</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Business')">
+          <div class="cat-icon">🏢</div>
+          <div class="cat-name">Business</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Vehicles')">
+          <div class="cat-icon">🚗</div>
+          <div class="cat-name">Vehicles</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Education')">
+          <div class="cat-icon">🎓</div>
+          <div class="cat-name">Education</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Public Notice')">
+          <div class="cat-icon">📢</div>
+          <div class="cat-name">Public Notice</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Lost & Found')">
+          <div class="cat-icon">🔍</div>
+          <div class="cat-name">Lost & Found</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Obituary')">
+          <div class="cat-icon">🕊️</div>
+          <div class="cat-name">Obituary</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Travel')">
+          <div class="cat-icon">✈️</div>
+          <div class="cat-name">Travel</div>
+        </div>
+        <div class="category-card" onclick="selectCategory(this, 'Rental')">
+          <div class="cat-icon">🔑</div>
+          <div class="cat-name">Rental</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 3: FORMAT ═══ -->
+    <div class="step-panel" id="panel2">
+      <div class="panel-title">Choose Ad Format</div>
+      <p class="panel-sub">Understanding the difference helps you pick the best format for your budget and goal</p>
+      <div class="format-grid">
+        <div class="format-card" onclick="selectFormat(this, 'Classified')">
+          <div class="format-card-header">📝</div>
+          <div class="format-card-body">
+            <h3>Classified Ad</h3>
+            <p>Text-only ads that appear in the classified section of the newspaper. Charged per word, line, or character. Appears alongside similar category ads. Cost-effective for high volumes.</p>
+            <span class="format-tag tag-popular">Most Popular</span>
+            <span class="format-tag" style="background:rgba(22,33,62,0.1); color:#16213e;">Budget Friendly</span>
+          </div>
+        </div>
+        <div class="format-card" onclick="selectFormat(this, 'Display')">
+          <div class="format-card-header">🖼️</div>
+          <div class="format-card-body">
+            <h3>Display Ad</h3>
+            <p>Visual ads with images, logos, custom typography, and creative designs. Can appear anywhere in the newspaper. Charged per column centimeter (cc) or per page fraction. High visibility.</p>
+            <span class="format-tag tag-display">High Impact</span>
+            <span class="format-tag" style="background:rgba(192,57,43,0.1); color:#922b21;">Brand Building</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4: NEWSPAPER TYPE ═══ -->
+    <div class="step-panel" id="panel3">
+      <div class="panel-title">Select Newspaper Type</div>
+      <p class="panel-sub">Choose the publication category that matches your audience</p>
+      <div class="newstype-grid">
+        <div class="newstype-card" onclick="selectNewsType(this, 'Main Newspaper')">
+          <div class="check">✓</div>
+          <span class="newstype-badge" style="background:rgba(21,101,192,0.12); color:#1565c0;">General</span>
+          <div style="font-size:3rem; margin-bottom:12px;">📰</div>
+          <h3>Main Newspaper</h3>
+          <p style="font-size:0.85rem; color:#888; margin:0;">National and regional dailies with widest readership</p>
+        </div>
+        <div class="newstype-card" onclick="selectNewsType(this, 'Obituary / Personal')">
+          <div class="check">✓</div>
+          <span class="newstype-badge" style="background:rgba(92,92,92,0.12); color:#5c5c5c;">Personal</span>
+          <div style="font-size:3rem; margin-bottom:12px;">🕊️</div>
+          <h3>Obituary / Personal</h3>
+          <p style="font-size:0.85rem; color:#888; margin:0;">Death notices, tributes, and personal announcements</p>
+        </div>
+        <div class="newstype-card" onclick="selectNewsType(this, 'Appointment')">
+          <div class="check">✓</div>
+          <span class="newstype-badge" style="background:rgba(46,125,50,0.12); color:#2e7d32;">Recruitment</span>
+          <div style="font-size:3rem; margin-bottom:12px;">👔</div>
+          <h3>Appointment</h3>
+          <p style="font-size:0.85rem; color:#888; margin:0;">Government and corporate job vacancy announcements</p>
+        </div>
+        <div class="newstype-card" onclick="selectNewsType(this, 'Public Notice')">
+          <div class="check">✓</div>
+          <span class="newstype-badge" style="background:rgba(191,54,12,0.12); color:#bf360c;">Legal</span>
+          <div style="font-size:3rem; margin-bottom:12px;">⚖️</div>
+          <h3>Public Notice</h3>
+          <p style="font-size:0.85rem; color:#888; margin:0;">Court notices, tenders, name change, legal notices</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 5: CITY & PRICING ═══ -->
+    <div class="step-panel" id="panel4">
+      <div class="panel-title">Select City & Edition</div>
+      <p class="panel-sub">Choose your target city. Prices vary by edition and publication day.</p>
+      <div class="alert-info">💡 All prices are per insertion. Sunday editions may be priced differently.</div>
+      <div class="pricing-table">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>City</th>
+              <th>Publishing Days</th>
+              <th>Starting Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cityTableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 6: AD SIZE ═══ -->
+    <div class="step-panel" id="panel5">
+      <div class="panel-title">Select Ad Size</div>
+      <p class="panel-sub">Choose the size that fits your budget and visibility needs</p>
+      <div class="size-grid" id="sizeGrid">
+        <div class="size-card" onclick="selectSize(this, 'Full Page', 45000)">
+          <div class="size-visual" style="height:100px;"> Full Page </div>
+          <div class="size-name"> full image </div>
+          <p class="size-dim">38cm × 53cm</p>
+          <div class="size-price">₹45,000+</div>
+        </div>
+        <div class="size-card" onclick="selectSize(this, 'Half Page', 24000)">
+          <div class="size-visual" style="height:75px;"> Half page </div>
+          <div class="size-name">  half page </div>
+          <p class="size-dim">38cm × 26cm</p>
+          <div class="size-price">₹24,000+</div>
+        </div>
+        <div class="size-card" onclick="selectSize(this, 'Quarter Page', 13000)">
+          <div class="size-visual" style="height:55px;"> quater page </div>
+          <div class="size-name"> quater page </div>
+          <p class="size-dim">19cm × 26cm</p>
+          <div class="size-price">₹13,000+</div>
+        </div>
+        <div class="size-card" onclick="selectSize(this, 'Jacket Ad', 85000)">
+          <div class="size-visual" style="height:90px;">Jacket</div>
+          <div class="size-name"> jacket </div>
+          <p class="size-dim">Front + Back cover</p>
+          <div class="size-price">₹85,000+</div>
+        </div>
+        <div class="size-card" onclick="selectSize(this, 'Bookmark Ad', 8500)">
+          <div class="size-visual" style="height:60px;">Bookmark</div>
+          <div class="size-name">Bookmark Ad</div>
+          <p class="size-dim">6cm × 25cm</p>
+          <div class="size-price">₹8,500+</div>
+        </div>
+        <div class="size-card" onclick="selectSize(this, 'Pointer Ad', 5200)">
+          <div class="size-visual" style="height:50px;">Pointer</div>
+          <div class="size-name">Pointer Ad</div>
+          <p class="size-dim">4cm × 4cm</p>
+          <div class="size-price">₹5,200+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 7: DATE & BOOKING ═══ -->
+    <div class="step-panel" id="panel6">
+      <div class="panel-title">Schedule Your Ad</div>
+      <p class="panel-sub">Pick a publication date and review your order</p>
+      <div class="booking-form-grid">
+        <div class="booking-form-main">
+          <div class="form-group-light">
+            <label class="section-title-sm">Publication Date</label>
+            <input type="date" id="pubDate" class="date-picker-custom" />
+          </div>
+          <div class="form-group-light" style="margin-top:24px;">
+            <label class="section-title-sm">Select Edition</label>
+            <div class="edition-selector" id="editionSelector">
+              <div class="edition-opt selected" onclick="toggleEdition(this)">All India</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">North</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">South</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">East</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">West</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">Chennai</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">Delhi</div>
+              <div class="edition-opt" onclick="toggleEdition(this)">Mumbai</div>
+            </div>
+          </div>
+          <div class="form-group-light" style="margin-top:24px;">
+            <label class="section-title-sm">Ad Content Preview</label>
+            <textarea rows="4" class="input-light" style="resize:vertical; width:100%;" placeholder="Your ad text will appear here. For display ads, your image will be shown."></textarea>
+          </div>
+          <button class="btn btn-primary btn-full" style="margin-top:24px;" onclick="goToStep(7)">
+            Proceed to Payment →
+          </button>
+        </div>
+        <div class="booking-summary">
+          <h4>📋 Booking Summary</h4>
+          <div class="summary-row"><span class="label">Ad Type</span><span class="value" id="sumAdType">—</span></div>
+          <div class="summary-row"><span class="label">Category</span><span class="value" id="sumCategory">—</span></div>
+          <div class="summary-row"><span class="label">Newspaper</span><span class="value" id="sumNewspaper">—</span></div>
+          <div class="summary-row"><span class="label">City</span><span class="value" id="sumCity">—</span></div>
+          <div class="summary-row"><span class="label">Size</span><span class="value" id="sumSize">—</span></div>
+          <div class="summary-row"><span class="label">Base Price</span><span class="value" id="sumBasePrice">—</span></div>
+          <div class="summary-row"><span class="label">GST (18%)</span><span class="value" id="sumGST">—</span></div>
+          <div class="summary-total">
+            <div class="total-label">Total Amount</div>
+            <div class="total-amount" id="sumTotal"><span>₹</span>—</div>
+          </div>
+          <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); text-align:center;">🔒 Secure 256-bit SSL encryption</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 8: PAYMENT ═══ -->
+    <div class="step-panel" id="panel7">
+      <div class="panel-title">Complete Payment</div>
+      <p class="panel-sub">Choose your preferred payment method to confirm the booking</p>
+      <div class="payment-grid">
+        <div class="payment-main">
+          <div class="payment-methods">
+            <div class="payment-tab active" onclick="switchPayment(this, 'upi')">
+              <span class="tab-icon">📱</span>
+              UPI
+            </div>
+            <div class="payment-tab" onclick="switchPayment(this, 'card')">
+              <span class="tab-icon">💳</span>
+              Debit / Credit Card
+            </div>
+            <div class="payment-tab" onclick="switchPayment(this, 'netbanking')">
+              <span class="tab-icon">🏦</span>
+              Net Banking
+            </div>
+          </div>
+
+          <!-- UPI Panel -->
+          <div class="payment-panel active" id="pay-upi">
+            <p class="section-title-sm">Enter UPI ID</p>
+            <div class="upi-input-wrap">
+              <input type="text" class="form-input-light" placeholder="yourname@upi" value="user@okaxis" />
+              <button class="btn btn-dark" onclick="verifyUPI(this)">Verify</button>
+            </div>
+            <p class="section-title-sm" style="margin-top:24px;">Or pay with</p>
+            <div class="upi-apps">
+              <div class="upi-app" onclick="selectUPIApp(this)">📲 GPay</div>
+              <div class="upi-app" onclick="selectUPIApp(this)">🔷 PhonePe</div>
+              <div class="upi-app" onclick="selectUPIApp(this)">💛 Paytm</div>
+              <div class="upi-app" onclick="selectUPIApp(this)">🟣 BHIM</div>
+              <div class="upi-app" onclick="selectUPIApp(this)">🔴 Amazon Pay</div>
+            </div>
+          </div>
+
+          <!-- Card Panel -->
+          <div class="payment-panel" id="pay-card">
+            <div class="card-form-grid">
+              <div class="full">
+                <label class="input-label">Card Number</label>
+                <input type="text" class="input-light" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCard(this)" />
+              </div>
+              <div class="full">
+                <label class="input-label">Name on Card</label>
+                <input type="text" class="input-light" placeholder="JOHN DOE" />
+              </div>
+              <div>
+                <label class="input-label">Expiry Date</label>
+                <input type="text" class="input-light" placeholder="MM / YY" maxlength="7" />
+              </div>
+              <div>
+                <label class="input-label">CVV</label>
+                <input type="password" class="input-light" placeholder="•••" maxlength="3" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Net Banking Panel -->
+          <div class="payment-panel" id="pay-netbanking">
+            <p class="section-title-sm">Select Your Bank</p>
+            <div class="bank-list">
+              <div class="bank-item" onclick="selectBank(this)"><span>🔵</span> SBI</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>🔴</span> HDFC Bank</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>🟠</span> ICICI Bank</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>🟢</span> Axis Bank</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>🔷</span> Kotak Mahindra</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>⚫</span> Bank of Baroda</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>🟡</span> Punjab National</div>
+              <div class="bank-item" onclick="selectBank(this)"><span>🔴</span> Yes Bank</div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-full" style="margin-top:32px; font-size:1.05rem; padding:18px 32px;" onclick="confirmBooking()">
+            🔒 Confirm Booking & Pay <span id="payBtnAmt"></span>
+          </button>
+          <p style="text-align:center; font-size:0.78rem; color:#aaa; margin-top:12px;">Your payment is 100% secure. We use 256-bit SSL encryption.</p>
+        </div>
+
+        <div class="booking-summary">
+          <h4>📋 Order Summary</h4>
+          <div class="summary-row"><span class="label">Ad Type</span><span class="value" id="payAdType">—</span></div>
+          <div class="summary-row"><span class="label">Category</span><span class="value" id="payCat">—</span></div>
+          <div class="summary-row"><span class="label">City</span><span class="value" id="payCity">—</span></div>
+          <div class="summary-row"><span class="label">Ad Size</span><span class="value" id="paySize">—</span></div>
+          <div class="summary-row"><span class="label">Publish Date</span><span class="value" id="payDate">—</span></div>
+          <div class="summary-row"><span class="label">Base Price</span><span class="value" id="payBase">—</span></div>
+          <div class="summary-row"><span class="label">GST (18%)</span><span class="value" id="payGST">—</span></div>
+          <div class="summary-total">
+            <div class="total-label">Amount Payable</div>
+            <div class="total-amount" id="payTotal"><span>₹</span>—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end dashboard-content -->
+</div><!-- end dashboard-main -->
+
+<!-- ── SUCCESS MODAL ── -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <div class="modal-icon">✓</div>
+    <h2>Booking Confirmed!</h2>
+    <p>Your advertisement has been successfully booked and sent for review.</p>
+    <p style="font-size:0.85rem;">You will receive a confirmation email with your ad proof within 2 hours.</p>
+    <div class="booking-id">Booking ID: <span id="bookingIdDisplay">—</span></div>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
+      <button class="btn btn-primary" onclick="resetBooking()">📝 Book Another Ad</button>
+      <button class="btn btn-dark" onclick="closeModal()">View Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile sidebar toggle -->
+<button class="mobile-sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+<script src="api.js"></script>
+<script src="script.js"></script>
+<script>
+/* ══════════════════════════════════
+   DASHBOARD LOGIC
+══════════════════════════════════ */
+
+// Protect dashboard - redirect if not logged in
+requireAuth();
+
+const currentUser = getUser();
+const userName = currentUser.firstName 
+  ? currentUser.firstName + ' ' + currentUser.lastName 
+  : localStorage.getItem('user_name') || 'User';
+const userEmail = currentUser.email || localStorage.getItem('user_email') || 'user@adpress.in';
+
+const initials = userName.slice(0, 2).toUpperCase();
+document.getElementById('sidebarAvatar').textContent = initials;
+document.getElementById('topbarAvatar').textContent = initials;
+document.getElementById('sidebarName').textContent = userName;
+document.getElementById('topbarName').textContent = userName;
+
+// State
+let booking = JSON.parse(localStorage.getItem('booking') || '{}');
+let currentStep = 0;
+
+const stepLabels = ['Select Ad Type','Select Category','Choose Format','Select Newspaper','City & Pricing','Ad Size','Date & Booking','Payment'];
+
+// Set today as default date
+const today = new Date(); today.setDate(today.getDate() + 2);
+const dateInput = document.getElementById('pubDate');
+if (dateInput) dateInput.value = today.toISOString().split('T')[0];
+
+// City Data
+const cities = [
+  { name: 'Chennai', days: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], price: 3200, newspaper: 'The Hindu / Dinamalar' },
+  { name: 'Madurai', days: ['Mon','Wed','Fri','Sun'], price: 1800, newspaper: 'Dinamalar / Dina Mani' },
+  { name: 'Coimbatore', days: ['Mon','Tue','Wed','Thu','Fri','Sat'], price: 2100, newspaper: 'The Hindu / Dinamalar' },
+  { name: 'Salem', days: ['Mon','Wed','Fri'], price: 1400, newspaper: 'Dinakaran / Dinamalar' },
+  { name: 'Tirunelveli', days: ['Tue','Thu','Sat'], price: 1200, newspaper: 'Dina Mani / Virakesari' },
+  { name: 'Erode', days: ['Mon','Wed','Sat'], price: 1100, newspaper: 'Dinamalar' },
+  { name: 'Thanjavur', days: ['Mon','Thu','Sun'], price: 1000, newspaper: 'Dinakaran' },
+  { name: 'Cuddalore', days: ['Tue','Fri'], price: 900, newspaper: 'Dinathanthi' },
+  { name: 'Nagercoil', days: ['Mon','Wed','Fri'], price: 1050, newspaper: 'Virakesari' },
+  { name: 'Vellore', days: ['Tue','Thu','Sat'], price: 1150, newspaper: 'The Hindu / Dinamalar' },
+  { name: 'Trichy', days: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], price: 1900, newspaper: 'Dinamalar / The Hindu' },
+  { name: 'Tiruppur', days: ['Mon','Wed','Fri','Sun'], price: 1300, newspaper: 'Dinamalar' },
+  { name: 'Pondicherry', days: ['Mon','Wed','Sat'], price: 1400, newspaper: 'The Hindu' },
+  { name: 'Kanchipuram', days: ['Tue','Thu'], price: 950, newspaper: 'Dinathanthi' },
+  { name: 'Villupuram', days: ['Mon','Fri'], price: 850, newspaper: 'Dinakaran' },
+  { name: 'Thoothukudi', days: ['Tue','Sat'], price: 1000, newspaper: 'Virakesari' },
+  { name: 'Karur', days: ['Wed','Sat'], price: 880, newspaper: 'Dinathanthi' },
+  { name: 'Krishnagiri', days: ['Mon','Thu'], price: 820, newspaper: 'Dinamalar' },
+];
+
+function buildCityTable() {
+  const tbody = document.getElementById('cityTableBody');
+  tbody.innerHTML = '';
+  cities.forEach((c, i) => {
+    const allDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const dayPills = allDays.map(d =>
+      `<span class="day-pill ${c.days.includes(d) ? 'active' : ''}">${d}</span>`
+    ).join('');
+    tbody.innerHTML += `
+      <tr>
+        <td><span class="city-rank">${i+1}</span></td>
+        <td><strong>${c.name}</strong><br><span style="font-size:0.78rem; color:#aaa;">${c.newspaper}</span></td>
+        <td><div class="day-pills">${dayPills}</div></td>
+        <td><div class="price-tag">₹${c.price.toLocaleString()} <span>/insertion</span></div></td>
+        <td><button class="btn btn-dark btn-sm" onclick="selectCity('${c.name}', ${c.price})">Select →</button></td>
+      </tr>`;
+  });
+}
+buildCityTable();
+
+/* ── Step Navigation ── */
+function goToStep(n) {
+  document.getElementById('panel' + currentStep).classList.remove('active');
+  document.getElementById('stepInd' + currentStep).classList.remove('active');
+  document.getElementById('stepInd' + currentStep).classList.add('done');
+  if (currentStep < 7) document.getElementById('conn' + currentStep).classList.add('done');
+
+  currentStep = n;
+  document.getElementById('panel' + n).classList.add('active');
+  document.getElementById('stepInd' + n).classList.remove('done');
+  document.getElementById('stepInd' + n).classList.add('active');
+  document.querySelector('.dashboard-content').scrollTop = 0;
+  window.scrollTo(0, 0);
+
+  document.getElementById('breadcrumbStep').textContent = stepLabels[n];
+  localStorage.setItem('booking', JSON.stringify(booking));
+  updateSummary();
+}
+
+/* ── Selections ── */
+function selectAdType(el, type) {
+  document.querySelectorAll('.adtype-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.adType = type;
+  setTimeout(() => goToStep(1), 400);
+}
+
+function selectCategory(el, cat) {
+  document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.category = cat;
+  setTimeout(() => goToStep(2), 350);
+}
+
+function selectFormat(el, fmt) {
+  document.querySelectorAll('.format-card').forEach(c => c.style.borderColor = '#e8e4dc');
+  el.style.borderColor = 'var(--gold)';
+  booking.format = fmt;
+  setTimeout(() => goToStep(3), 350);
+}
+
+function selectNewsType(el, type) {
+  document.querySelectorAll('.newstype-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.newsType = type;
+  setTimeout(() => goToStep(4), 350);
+}
+
+function selectCity(city, price) {
+  booking.city = city;
+  booking.cityPrice = price;
+  goToStep(5);
+}
+
+function selectSize(el, size, price) {
+  document.querySelectorAll('.size-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.size = size;
+  booking.sizePrice = price;
+  setTimeout(() => goToStep(6), 350);
+}
+
+/* ── Summary ── */
+function updateSummary() {
+  const base = (booking.cityPrice || 0) + (booking.sizePrice || 0);
+  const gst = Math.round(base * 0.18);
+  const total = base + gst;
+  booking.basePrice = base;
+  booking.gst = gst;
+  booking.total = total;
+
+  const date = document.getElementById('pubDate')?.value || '';
+
+  const fields = {
+    sumAdType: booking.adType, sumCategory: booking.category,
+    sumNewspaper: booking.newsType, sumCity: booking.city, sumSize: booking.size,
+    sumBasePrice: base ? '₹' + base.toLocaleString() : '—',
+    sumGST: gst ? '₹' + gst.toLocaleString() : '—',
+    payAdType: booking.adType, payCat: booking.category,
+    payCity: booking.city, paySize: booking.size,
+    payDate: date, payBase: base ? '₹' + base.toLocaleString() : '—',
+    payGST: gst ? '₹' + gst.toLocaleString() : '—',
+  };
+  for (const [id, val] of Object.entries(fields)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val || '—';
+  }
+
+  const totalStr = total ? total.toLocaleString() : '—';
+  const el1 = document.getElementById('sumTotal');
+  if (el1) el1.innerHTML = `<span>₹</span>${totalStr}`;
+  const el2 = document.getElementById('payTotal');
+  if (el2) el2.innerHTML = `<span>₹</span>${totalStr}`;
+  const el3 = document.getElementById('payBtnAmt');
+  if (el3) el3.textContent = total ? `— ₹${total.toLocaleString()}` : '';
+}
+
+/* ── Payment ── */
+function switchPayment(tab, panelId) {
+  document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.payment-panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('pay-' + panelId).classList.add('active');
+}
+
+function verifyUPI(btn) {
+  btn.textContent = '✓ Verified';
+  btn.style.background = '#27ae60';
+}
+
+function selectUPIApp(el) {
+  document.querySelectorAll('.upi-app').forEach(a => a.style.borderColor = '#e8e4dc');
+  el.style.borderColor = 'var(--gold)';
+}
+
+function formatCard(input) {
+  let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  let matches = v.match(/\d{4,16}/g);
+  let match = (matches && matches[0]) || '';
+  let parts = [];
+  for (let i = 0; i < match.length; i += 4) parts.push(match.substring(i, i + 4));
+  input.value = parts.length ? parts.join('  ') : v;
+}
+
+function selectBank(el) {
+  document.querySelectorAll('.bank-item').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+async function confirmBooking() {
+  const btn = document.querySelector('#panel7 .btn-primary');
+  btn.textContent = '⏳ Processing Payment...';
+  btn.disabled = true;
+
+  try {
+    const publishDate = document.getElementById('pubDate').value;
+
+    // Step 1 - Create booking
+    const bookingData = {
+      adType:      booking.adType,
+      category:    booking.category,
+      format:      booking.format,
+      newsType:    booking.newsType,
+      city:        booking.city,
+      newspaper:   booking.newsType,
+      adSize:      booking.size,
+      publishDate: publishDate,
+      basePrice:   booking.basePrice,
+      gst:         booking.gst,
+      totalAmount: booking.total
+    };
+
+    const bookingResponse = await createBooking(bookingData);
+    const bookingId = bookingResponse.booking._id;
+
+    // Step 2 - Simulate payment
+    const paymentMethod = document.querySelector('.payment-tab.active')?.textContent
+      .trim().toLowerCase().includes('upi') ? 'upi'
+      : document.querySelector('.payment-tab.active')?.textContent
+      .trim().toLowerCase().includes('card') ? 'card' : 'netbanking';
+
+    const paymentResponse = await fetch('http://localhost:5000/api/payments/simulate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify({ bookingId, method: paymentMethod })
+    });
+
+    const paymentData = await paymentResponse.json();
+
+    if (!paymentData.success) throw new Error(paymentData.message);
+
+    // Step 3 - Show success
+    booking.bookingId = paymentData.booking.bookingId;
+    booking.paymentId = paymentData.paymentId;
+    booking.status = 'confirmed';
+    localStorage.setItem('booking', JSON.stringify(booking));
+
+    document.getElementById('bookingIdDisplay').textContent = booking.bookingId;
+    document.getElementById('successModal').classList.add('show');
+
+  } catch (error) {
+    btn.textContent = '🔒 Confirm Booking & Pay';
+    btn.disabled = false;
+    alert('Payment failed: ' + error.message);
+  }
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('show');
+}
+
+function resetBooking() {
+  booking = {};
+  localStorage.removeItem('booking');
+  currentStep = 0;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step').forEach(s => { s.classList.remove('active','done'); });
+  document.querySelectorAll('.step-connector').forEach(c => c.classList.remove('done'));
+  document.querySelector('#panel0').classList.add('active');
+  document.querySelector('#stepInd0').classList.add('active');
+  document.getElementById('breadcrumbStep').textContent = 'Select Ad Type';
+  document.getElementById('successModal').classList.remove('show');
+  document.querySelectorAll('.adtype-card, .category-card, .newstype-card, .size-card').forEach(c => c.classList.remove('selected'));
+  updateSummary();
+  window.scrollTo(0, 0);
+  const btn = document.querySelector('#panel7 .btn-primary');
+  if (btn) { btn.textContent = '🔒 Confirm Booking & Pay'; btn.disabled = false; }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function toggleEdition(el) {
+  el.classList.toggle('selected');
+}
+
+// Init
+updateSummary();
+</script>
+</body>
+</html>

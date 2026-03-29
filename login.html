@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — AdPress</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon">AP</div>
+    Ad<span>Press</span>
+  </a>
+  <div class="navbar-actions">
+    <a href="index.html" class="btn btn-outline btn-sm">← Back to Home</a>
+  </div>
+</nav>
+
+<!-- ── LOGIN PAGE ── -->
+<div class="login-page" style="padding-top:72px;">
+  <!-- Left Panel -->
+  <div class="login-left">
+    <div class="login-left-inner">
+      <span class="badge" style="margin-bottom:24px;">Trusted by 50,000+ advertisers</span>
+      <h1>Advertise Smarter.<br><span>Reach <em>Further.</em></span></h1>
+      <p>India's most comprehensive newspaper ad booking platform. Print meets digital in one seamless experience.</p>
+      <ul class="login-features">
+        <li>
+          <div class="feat-icon">📰</div>
+          <div>
+            <strong style="color:#fff; display:block; margin-bottom:3px;">500+ Newspapers</strong>
+            Book ads in leading national and regional publications instantly
+          </div>
+        </li>
+        <li>
+          <div class="feat-icon">⚡</div>
+          <div>
+            <strong style="color:#fff; display:block; margin-bottom:3px;">Real-Time Pricing</strong>
+            Transparent rates with zero hidden charges — pay only what you see
+          </div>
+        </li>
+        <li>
+          <div class="feat-icon">✅</div>
+          <div>
+            <strong style="color:#fff; display:block; margin-bottom:3px;">Instant Confirmation</strong>
+            Booking confirmed via email & SMS within seconds of payment
+          </div>
+        </li>
+        <li>
+          <div class="feat-icon">🎯</div>
+          <div>
+            <strong style="color:#fff; display:block; margin-bottom:3px;">Targeted Reach</strong>
+            Choose specific editions, cities, and days for laser-focused campaigns
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="login-right">
+
+    <!-- ── SIGN IN CARD ── -->
+    <div class="login-card" id="signInCard">
+      <h2>Welcome Back</h2>
+      <p class="login-sub">Sign in to your AdPress account</p>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" value="user@adpress.in" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" value="password123" />
+      </div>
+
+      <div class="form-row">
+        <label class="form-check">
+          <input type="checkbox" checked />
+          Remember me
+        </label>
+        <a href="#" class="form-link">Forgot password?</a>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="handleLogin()">
+        Sign In to Dashboard →
+      </button>
+
+      <div class="divider">or continue with</div>
+
+      <div class="social-login">
+        <button class="btn-social" onclick="handleLogin()">
+          <span>G</span> Google
+        </button>
+        <button class="btn-social" onclick="handleLogin()">
+          <span>f</span> Facebook
+        </button>
+        <button class="btn-social" onclick="handleLogin()">
+          <span>🍎</span> Apple
+        </button>
+      </div>
+
+      <p class="login-register">
+        New to AdPress? <a href="#" onclick="showRegister(event)">Create free account</a>
+      </p>
+    </div>
+
+    <!-- ── REGISTER CARD ── -->
+    <div class="login-card" id="registerCard" style="display:none;">
+      <h2>Create Account</h2>
+      <p class="login-sub">Join 50,000+ advertisers on AdPress — it's free</p>
+
+      <div class="form-row-two">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" id="regFirstName" class="form-input" placeholder="Ravi" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" id="regLastName" class="form-input" placeholder="Kumar" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">+91</span>
+          <input type="tel" id="regPhone" class="form-input form-input-prefixed" placeholder="98765 43210" maxlength="10" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-eye-wrap">
+          <input type="password" id="regPassword" class="form-input" placeholder="Min. 8 characters" />
+          <button class="eye-toggle" type="button" onclick="togglePassword('regPassword', this)">👁</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-eye-wrap">
+          <input type="password" id="regConfirm" class="form-input" placeholder="Re-enter password" />
+          <button class="eye-toggle" type="button" onclick="togglePassword('regConfirm', this)">👁</button>
+        </div>
+      </div>
+
+      <div class="password-strength" id="strengthBar" style="display:none;">
+        <div class="strength-track">
+          <div class="strength-fill" id="strengthFill"></div>
+        </div>
+        <span class="strength-label" id="strengthLabel">Weak</span>
+      </div>
+
+      <div class="form-group" style="margin-top:4px;">
+        <label class="form-check" style="align-items:flex-start; gap:10px;">
+          <input type="checkbox" id="regTerms" style="margin-top:3px;" />
+          <span>I agree to AdPress <a href="#" class="form-link">Terms of Service</a> and <a href="#" class="form-link">Privacy Policy</a></span>
+        </label>
+      </div>
+
+      <div class="reg-error" id="regError" style="display:none;"></div>
+
+      <button class="btn btn-primary btn-full" onclick="handleRegister()">
+        Create Free Account →
+      </button>
+
+      <div class="divider">or sign up with</div>
+
+      <div class="social-login">
+        <button class="btn-social" onclick="handleLogin()">
+          <span>G</span> Google
+        </button>
+        <button class="btn-social" onclick="handleLogin()">
+          <span>f</span> Facebook
+        </button>
+        <button class="btn-social" onclick="handleLogin()">
+          <span>🍎</span> Apple
+        </button>
+      </div>
+
+      <p class="login-register">
+        Already have an account? <a href="#" onclick="showLogin(event)">Sign in</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  /* ── Form row two columns ── */
+  .form-row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media(max-width: 480px) { .form-row-two { grid-template-columns: 1fr; } }
+
+  /* ── Phone prefix input ── */
+  .input-prefix-wrap {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    background: #fff;
+  }
+  .input-prefix-wrap:focus-within { border-color: var(--gold); }
+  .input-prefix {
+    padding: 0 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+    background: #f7f5f0;
+    border-right: 1.5px solid #ddd;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .form-input-prefixed {
+    border: none !important;
+    border-radius: 0 !important;
+    flex: 1;
+    height: 48px;
+    padding: 0 14px;
+    font-size: 0.95rem;
+    outline: none;
+    background: transparent;
+  }
+
+  /* ── Password eye toggle ── */
+  .input-eye-wrap { position: relative; }
+  .input-eye-wrap .form-input { padding-right: 44px; width: 100%; box-sizing: border-box; }
+  .eye-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .eye-toggle:hover { opacity: 1; }
+
+  /* ── Password strength bar ── */
+  .password-strength {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .strength-track {
+    flex: 1;
+    height: 5px;
+    background: #e8e4dc;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: #e74c3c;
+    transition: width 0.3s, background 0.3s;
+  }
+  .strength-label { font-size: 0.75rem; font-weight: 600; color: #999; min-width: 48px; }
+
+  /* ── Error message ── */
+  .reg-error {
+    background: rgba(231,76,60,0.08);
+    border: 1px solid rgba(231,76,60,0.25);
+    color: #c0392b;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+  }
+
+  /* ── Card slide transition ── */
+  .login-card { animation: cardIn 0.35s ease; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script src="api.js"></script>
+<script src="script.js"></script>
+<script>
+  // Redirect if already logged in
+  if (isLoggedIn()) window.location.href = 'dashboard.html';
+
+  /* ── Sign In ── */
+  async function handleLogin() {
+    const btn = document.querySelector('#signInCard .btn-primary');
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    if (!email || !password) {
+      alert('Please enter email and password');
+      return;
+    }
+
+    btn.textContent = 'Signing in...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+
+    try {
+      const data = await loginUser(email, password);
+      localStorage.setItem('user_name', data.user.firstName + ' ' + data.user.lastName);
+      localStorage.setItem('user_email', data.user.email);
+      window.location.href = 'dashboard.html';
+    } catch (error) {
+      btn.textContent = 'Sign In to Dashboard →';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      document.getElementById('regError') || alert(error.message);
+      alert('Login failed: ' + error.message);
+    }
+  }
+
+  /* ── Register ── */
+  async function handleRegister() {
+    const firstName = document.getElementById('regFirstName').value.trim();
+    const lastName  = document.getElementById('regLastName').value.trim();
+    const email     = document.getElementById('regEmail').value.trim();
+    const phone     = document.getElementById('regPhone').value.trim();
+    const password  = document.getElementById('regPassword').value;
+    const confirm   = document.getElementById('regConfirm').value;
+    const terms     = document.getElementById('regTerms').checked;
+    const errBox    = document.getElementById('regError');
+
+    const showErr = (msg) => {
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+    };
+
+    errBox.style.display = 'none';
+
+    if (!firstName || !lastName) return showErr('Please enter your first and last name.');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('Please enter a valid email.');
+    if (phone && !/^\d{10}$/.test(phone)) return showErr('Phone must be 10 digits.');
+    if (password.length < 8) return showErr('Password must be at least 8 characters.');
+    if (password !== confirm) return showErr('Passwords do not match.');
+    if (!terms) return showErr('Please accept the Terms of Service.');
+
+    const btn = document.querySelector('#registerCard .btn-primary');
+    btn.textContent = 'Creating account...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+
+    try {
+      const data = await registerUser({ firstName, lastName, email, phone, password });
+      localStorage.setItem('user_name', data.user.firstName + ' ' + data.user.lastName);
+      localStorage.setItem('user_email', data.user.email);
+      window.location.href = 'dashboard.html';
+    } catch (error) {
+      btn.textContent = 'Create Free Account →';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      showErr(error.message);
+    }
+  }
+
+  /* ── Toggle forms ── */
+  function showRegister(e) {
+    e.preventDefault();
+    document.getElementById('signInCard').style.display = 'none';
+    const reg = document.getElementById('registerCard');
+    reg.style.display = 'block';
+  }
+
+  function showLogin(e) {
+    e.preventDefault();
+    document.getElementById('registerCard').style.display = 'none';
+    document.getElementById('signInCard').style.display = 'block';
+  }
+
+  /* ── Password toggle ── */
+  function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === 'password' ? 'text' : 'password';
+    btn.textContent = input.type === 'password' ? '👁' : '🙈';
+  }
+
+  /* ── Password strength ── */
+  document.getElementById('regPassword').addEventListener('input', function () {
+    const val = this.value;
+    const bar = document.getElementById('strengthBar');
+    const fill = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    if (!val) { bar.style.display = 'none'; return; }
+    bar.style.display = 'flex';
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = [
+      { pct: '25%', color: '#e74c3c', text: 'Weak' },
+      { pct: '50%', color: '#e67e22', text: 'Fair' },
+      { pct: '75%', color: '#f1c40f', text: 'Good' },
+      { pct: '100%', color: '#27ae60', text: 'Strong' },
+    ];
+    const lv = levels[score - 1] || levels[0];
+    fill.style.width = lv.pct;
+    fill.style.background = lv.color;
+    label.textContent = lv.text;
+    label.style.color = lv.color;
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('registerCard').style.display !== 'none') {
+        handleRegister();
+      } else {
+        handleLogin();
+      }
+    }
+  });
+</script>
+</body>
+</html>
