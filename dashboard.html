@@ -818,7 +818,7 @@ async function confirmBooking() {
       : document.querySelector('.payment-tab.active')?.textContent
       .trim().toLowerCase().includes('card') ? 'card' : 'netbanking';
 
-    const paymentResponse = await fetch('http://localhost:5000/api/payments/simulate', {
+    const paymentResponse = await fetch('https://adpress-backend.vercel.app/api/payments/simulate',  {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
