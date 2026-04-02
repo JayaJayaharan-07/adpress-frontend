@@ -11,8 +11,8 @@
 <!-- ── NAVBAR ── -->
 <nav class="navbar" id="navbar">
   <a href="index.html" class="navbar-logo">
-    <div class="logo-icon">AP</div>
-    Ad<span>Press</span>
+    <img src="images/logo.png" style="width:50px;"> 
+    Thanthi<span>Ads</span>
   </a>
   <div class="navbar-actions">
     <a href="index.html" class="btn btn-outline btn-sm">← Back to Home</a>
@@ -24,35 +24,35 @@
   <!-- Left Panel -->
   <div class="login-left">
     <div class="login-left-inner">
-      <span class="badge" style="margin-bottom:24px;">Trusted by 50,000+ advertisers</span>
+      <span class="badge" style="margin-bottom:24px; color:rgb(255, 191, 0);">Trusted by 50,000+ advertisers</span>
       <h1>Advertise Smarter.<br><span>Reach <em>Further.</em></span></h1>
       <p>India's most comprehensive newspaper ad booking platform. Print meets digital in one seamless experience.</p>
       <ul class="login-features">
         <li>
           <div class="feat-icon">📰</div>
           <div>
-            <strong style="color:#fff; display:block; margin-bottom:3px;">500+ Newspapers</strong>
+            <strong style="color:#fff; display:block; margin-bottom:3px; color:rgb(255, 191, 0);">50+ Lakhs Newspapers</strong>
             Book ads in leading national and regional publications instantly
           </div>
         </li>
         <li>
           <div class="feat-icon">⚡</div>
           <div>
-            <strong style="color:#fff; display:block; margin-bottom:3px;">Real-Time Pricing</strong>
+            <strong style="color:#fff; display:block; margin-bottom:3px; color:rgb(255, 191, 0);">Real-Time Pricing</strong>
             Transparent rates with zero hidden charges — pay only what you see
           </div>
         </li>
         <li>
           <div class="feat-icon">✅</div>
           <div>
-            <strong style="color:#fff; display:block; margin-bottom:3px;">Instant Confirmation</strong>
+            <strong style="color:#fff; display:block; margin-bottom:3px; color:rgb(255, 191, 0);">Instant Confirmation</strong>
             Booking confirmed via email & SMS within seconds of payment
           </div>
         </li>
         <li>
           <div class="feat-icon">🎯</div>
           <div>
-            <strong style="color:#fff; display:block; margin-bottom:3px;">Targeted Reach</strong>
+            <strong style="color:#fff; display:block; margin-bottom:3px; color:rgb(255, 191, 0);">Targeted Reach</strong>
             Choose specific editions, cities, and days for laser-focused campaigns
           </div>
         </li>
@@ -65,16 +65,16 @@
 
     <!-- ── SIGN IN CARD ── -->
     <div class="login-card" id="signInCard">
-      <h2>Welcome Back</h2>
-      <p class="login-sub">Sign in to your AdPress account</p>
+      <h2 style="color:rgb(255, 191, 0);">Welcome Back</h2>
+      <p class="login-sub">Sign in to your ThanthiAds account</p>
 
       <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" value="user@adpress.in" />
+        <label class="form-label" style="color: white;">Email Address</label>
+        <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" value="user@thanthiads.in" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Password</label>
+        <label class="form-label" style="color: white;">Password</label>
         <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" value="password123" />
       </div>
 
@@ -83,10 +83,10 @@
           <input type="checkbox" checked />
           Remember me
         </label>
-        <a href="#" class="form-link">Forgot password?</a>
+        <a href="#" class="form-link" style="color: white;">Forgot password?</a>
       </div>
 
-      <button class="btn btn-primary btn-full" onclick="handleLogin()">
+      <button class="btn btn-primary btn-full" onclick="handleLogin()" style="color: white;">
         Sign In to Dashboard →
       </button>
 
@@ -100,38 +100,38 @@
           <span>f</span> Facebook
         </button>
         <button class="btn-social" onclick="handleLogin()">
-          <span>🍎</span> Apple
+          <span>App</span>  Store
         </button>
       </div>
 
       <p class="login-register">
-        New to AdPress? <a href="#" onclick="showRegister(event)">Create free account</a>
+        New to ThanthiAds? <a href="#" onclick="showRegister(event)" style="color: white;">Create free account</a>
       </p>
     </div>
 
     <!-- ── REGISTER CARD ── -->
     <div class="login-card" id="registerCard" style="display:none;">
-      <h2>Create Account</h2>
+      <h2 style="color: rgb(255, 208, 0);">Create Account</h2>
       <p class="login-sub">Join 50,000+ advertisers on AdPress — it's free</p>
 
       <div class="form-row-two">
         <div class="form-group">
-          <label class="form-label">First Name</label>
+          <label class="form-label" style="color: white;">First Name</label>
           <input type="text" id="regFirstName" class="form-input" placeholder="Ravi" />
         </div>
         <div class="form-group">
-          <label class="form-label">Last Name</label>
+          <label class="form-label" style="color: white;">Last Name</label>
           <input type="text" id="regLastName" class="form-input" placeholder="Kumar" />
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Email Address</label>
+        <label class="form-label" style="color: white;">Email Address</label>
         <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Phone Number</label>
+        <label class="form-label" style="color: white;">Phone Number</label>
         <div class="input-prefix-wrap">
           <span class="input-prefix">+91</span>
           <input type="tel" id="regPhone" class="form-input form-input-prefixed" placeholder="98765 43210" maxlength="10" />
@@ -139,7 +139,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Password</label>
+        <label class="form-label" style="color: white;">Password</label>
         <div class="input-eye-wrap">
           <input type="password" id="regPassword" class="form-input" placeholder="Min. 8 characters" />
           <button class="eye-toggle" type="button" onclick="togglePassword('regPassword', this)">👁</button>
@@ -147,7 +147,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Confirm Password</label>
+        <label class="form-label" style="color: white;">Confirm Password</label>
         <div class="input-eye-wrap">
           <input type="password" id="regConfirm" class="form-input" placeholder="Re-enter password" />
           <button class="eye-toggle" type="button" onclick="togglePassword('regConfirm', this)">👁</button>
@@ -170,26 +170,26 @@
 
       <div class="reg-error" id="regError" style="display:none;"></div>
 
-      <button class="btn btn-primary btn-full" onclick="handleRegister()">
+      <button class="btn btn-primary btn-full" onclick="handleRegister()" style="color: white;">
         Create Free Account →
       </button>
 
       <div class="divider">or sign up with</div>
 
       <div class="social-login">
-        <button class="btn-social" onclick="handleLogin()">
+        <button class="btn-social" onclick="handleLogin()" style="color: white;">
           <span>G</span> Google
         </button>
-        <button class="btn-social" onclick="handleLogin()">
+        <button class="btn-social" onclick="handleLogin()" style="color: white;">
           <span>f</span> Facebook
         </button>
-        <button class="btn-social" onclick="handleLogin()">
+        <button class="btn-social" onclick="handleLogin()" style="color: white;">
           <span>🍎</span> Apple
         </button>
       </div>
 
       <p class="login-register">
-        Already have an account? <a href="#" onclick="showLogin(event)">Sign in</a>
+        Already have an account? <a href="#" onclick="showLogin(event)" style="color: white;">Sign in</a>
       </p>
     </div>
 
