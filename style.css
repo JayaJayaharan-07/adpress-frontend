@@ -841,6 +841,18 @@ a { text-decoration: none; color: inherit; }
   transition: var(--transition);
 }
 .topbar-notif:hover { background: #eeeeee7c; }
+.topbar-notif2 {
+  position: relative;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(128, 128, 128, 0.379);
+  border: 1px solid #e0dbd09b;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+.topbar-notif2:hover { background: #eeeeee7c; }
 .notif-dot {
   position: absolute;
   top: 6px; right: 6px;
